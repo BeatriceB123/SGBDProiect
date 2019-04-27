@@ -266,12 +266,12 @@ BEGIN
      v_data_tranzactie := TO_DATE('01-01-2018','MM-DD-YYYY')+TRUNC(DBMS_RANDOM.VALUE(0,485));
      v_ora := to_char(TRUNC(DBMS_RANDOM.VALUE(0,2)))||to_char(TRUNC(DBMS_RANDOM.VALUE(0,9)))||':'||
      to_char(TRUNC(DBMS_RANDOM.VALUE(0,5)))||to_char(TRUNC(DBMS_RANDOM.VALUE(0,9)));
-     v_id := round(dbms_random.value(1,60));
+     v_id := round(dbms_random.value(1,550000));
      IF (v_tranzactie = 'Withdraw') THEN
        v_id_aux := v_id;
       ELSE
         LOOP
-         v_id_aux := round(dbms_random.value(1,60));
+         v_id_aux := round(dbms_random.value(1,550000));
            exit when v_id<>v_id_aux;
          END LOOP; 
      END IF;
@@ -309,7 +309,3 @@ SELECT * FROM CUSTOMER;
 SELECT * FROM BANK_ACCOUNT;
 SELECT * FROM STAFF;
 SELECT * FROM TRANSACTION_HISTORY;
-
-
-
-
