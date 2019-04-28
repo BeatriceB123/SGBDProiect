@@ -221,7 +221,7 @@ CREATE OR REPLACE TRIGGER update_bank_account_rows
     END BEFORE EACH ROW;
     
     AFTER STATEMENT IS BEGIN
-      UPDATE bank SET updated_at = sysdate WHERE id_bank = v_id;
+      UPDATE bank_account SET updated_at = sysdate WHERE id_account = v_id;
     END AFTER STATEMENT;
   END;
 / 
@@ -331,8 +331,8 @@ CREATE OR REPLACE TRIGGER insert_bank_account
     END BEFORE EACH ROW;
     
     AFTER STATEMENT IS BEGIN
-      UPDATE bank SET updated_at = sysdate WHERE id_bank = v_id;
-      UPDATE bank SET created_at = sysdate WHERE id_bank = v_id;
+      UPDATE bank_account SET updated_at = sysdate WHERE id_account = v_id;
+      UPDATE bank_account SET created_at = sysdate WHERE id_account = v_id;
     END AFTER STATEMENT;
   END;
 / 
