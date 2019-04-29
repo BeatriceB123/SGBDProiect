@@ -506,6 +506,11 @@ CREATE OR REPLACE TRIGGER insert_transaction
       num => -20055,
       msg => 'Cannot withdraw money from another account.');
     END IF;
+    IF(v_value <= 0) THEN
+    RAISE_APPLICATION_ERROR (
+      num => -20056,
+      msg => 'Invalid monetary value.');
+    END IF;                                
     END BEFORE EACH ROW;
     
     AFTER STATEMENT IS BEGIN
