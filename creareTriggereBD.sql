@@ -510,7 +510,7 @@ CREATE OR REPLACE TRIGGER insert_transaction
     RAISE_APPLICATION_ERROR (
       num => -20056,
       msg => 'Invalid monetary value.');
-    END IF;                                
+    END IF;
     END BEFORE EACH ROW;
     
     AFTER STATEMENT IS BEGIN
