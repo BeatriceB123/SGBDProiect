@@ -263,7 +263,7 @@ END;
 /
 
 CREATE OR REPLACE FUNCTION add_transaction(
-    p_id_bank IN INT, p_id_staff IN INT, p_id_account_from IN INT, p_id_account_to IN INT, p_currency IN VARCHAR2, p_transaction_type IN VARCHAR2, p_date IN DATE, p_hour IN VARCHAR2, p_money_amount IN INT)
+    p_id_bank IN INT, p_id_staff IN INT, p_id_account_from IN INT, p_id_account_to IN INT, p_currency IN VARCHAR2, p_transaction_type IN VARCHAR2, p_money_amount IN INT)
 RETURN VARCHAR2
 AS
   v_id_transaction transaction_history.id_transaction%type;
@@ -287,7 +287,7 @@ BEGIN
       v_id_rate := v_id_rate - 0;
     ELSE return 'Invalid currency type';
     END CASE;
-  INSERT INTO transaction_history VALUES (v_id_transaction + 1, p_id_bank, p_id_staff, p_id_account_from, p_id_account_to, v_id_rate, p_transaction_type, p_date, p_hour, p_money_amount, NULL, NULL);
+  INSERT INTO transaction_history VALUES (v_id_transaction + 1, p_id_bank, p_id_staff, p_id_account_from, p_id_account_to, v_id_rate, p_transaction_type, sysdate, TO_CHAR(SYSDATE,'hh24:mi'), p_money_amount, NULL, NULL);
   return 'Transaction finished successfully';
 END;
 /
