@@ -109,6 +109,9 @@ CREATE TABLE transaction_history (
 )
 /
 
+CREATE INDEX staff_index
+on staff(job_position, id_bank);
+
 SET SERVEROUTPUT ON;
 DECLARE
   TYPE varr IS VARRAY(1000) OF varchar2(255);
@@ -292,20 +295,4 @@ BEGIN
      v_tranzactie, v_data_tranzactie, v_ora, v_cantitate_monetara, sysdate, sysdate);
    END LOOP;
 END;
-
-CREATE INDEX staff_index
-on staff(job_position, id_bank);
-
-DELETE FROM BANK;
-DELETE FROM EXCHANGE_RATE;
-DELETE FROM CUSTOMER;
-DELETE FROM BANK_ACCOUNT;
-DELETE FROM STAFF;
-DELETE FROM TRANSACTION_HISTORY;
-
-SELECT * FROM BANK;
-SELECT * FROM EXCHANGE_RATE;
-SELECT * FROM CUSTOMER;
-SELECT * FROM BANK_ACCOUNT;
-SELECT * FROM STAFF;
-SELECT * FROM TRANSACTION_HISTORY;
+/
