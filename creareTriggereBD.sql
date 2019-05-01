@@ -470,6 +470,7 @@ CREATE OR REPLACE TRIGGER insert_transaction
   v_original_amount bank_account.monetary_value%type;
   v_exchange exchange_rate.to_ron%type;
   v_acc_type bank_account.account_type%type;
+  v_staff_type staff.job_position%type;
   BEFORE EACH ROW IS
   BEGIN
     v_id := :NEW.id_transaction;
@@ -477,6 +478,7 @@ CREATE OR REPLACE TRIGGER insert_transaction
     v_account1 := :NEW.id_account_to;
     v_account2 := :NEW.id_account_from;
     v_value := :NEW.money_amount;
+    SELECT * INTO v_staff_type FROM (SELECT job_position FROM staff WHERE id_staff = :NEW.id_staff);
     SELECT * INTO v_acc_type FROM (SELECT account_type FROM bank_account WHERE id_account = v_account2);
     SELECT * INTO v_exchange FROM (SELECT to_ron FROM exchange_rate WHERE id_rate = :NEW.id_rate);
     SELECT * INTO v_original_amount FROM (SELECT monetary_value FROM bank_account WHERE id_account = v_account2);
@@ -510,6 +512,11 @@ CREATE OR REPLACE TRIGGER insert_transaction
     RAISE_APPLICATION_ERROR (
       num => -20056,
       msg => 'Invalid monetary value.');
+    END IF;
+    IF(v_staff_type NOT IN ('Consultant','Teller')) THEN
+    RAISE_APPLICATION_ERROR (
+      num => -20057,
+      msg => 'The transaction must be made by a consultant or teller.');
     END IF;
     END BEFORE EACH ROW;
     
