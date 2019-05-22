@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -14,16 +15,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="780.0" minWidth="1320.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="780.0" minWidth="1320.0" prefHeight="853.0" prefWidth="1320.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <tabs>
     <Tab text="Home">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TextField fx:id="ceva" layoutX="82.0" layoutY="237.0" promptText="Bank ID" />
-                  <Button fx:id="buton" layoutX="269.0" layoutY="97.0" mnemonicParsing="false" text="Get most active day" />
-                  <ComboBox fx:id="chooseMonth" layoutX="82.0" layoutY="84.0" opacity="0.72" prefHeight="25.0" prefWidth="148.0" promptText="Chose month" visibleRowCount="12" />
-                  <ComboBox fx:id="chooseDay" layoutX="81.0" layoutY="122.0" opacity="0.79" prefWidth="150.0" promptText="Choose day" />
                   <Button fx:id="buton1" layoutX="145.0" layoutY="279.0" mnemonicParsing="false" text="By region" />
                   <Button fx:id="buton11" layoutX="269.0" layoutY="524.0" mnemonicParsing="false" text="Get regional statistics" />
                   <Button fx:id="buton12" layoutX="269.0" layoutY="615.0" mnemonicParsing="false" text="Get Staff statistics" />
@@ -93,7 +91,7 @@
                            <children>
                               <Button mnemonicParsing="false" onAction="#muchSmallerSignCustomerButtonPushed" text="&lt;&lt;" />
                               <Button mnemonicParsing="false" onAction="#smallerSignCustomerButtonPushed" text="&lt;" />
-                              <TextField fx:id="customerFromIndex" text="Page number" />
+                              <TextField fx:id="customerFromIndex" text="1" />
                               <Button mnemonicParsing="false" onAction="#biggerSignCustomerButtonPushed" text="&gt;" />
                               <Button mnemonicParsing="false" onAction="#muchBiggerSignCustomerButtonPushed" text="&gt;&gt;" />
                               <Button mnemonicParsing="false" onAction="#showCustomersButtonPushed" text="Choose page" />
@@ -106,7 +104,7 @@
                               <Insets left="45.0" />
                            </padding>
                         </HBox>
-                        <TableView fx:id="customerTableView" prefHeight="602.0" prefWidth="1320.0">
+                        <TableView fx:id="customerTableView" prefHeight="519.0" prefWidth="1320.0">
                           <columns>
                               <TableColumn fx:id="idCustomerColumn" prefWidth="104.0" text="Id" />
                             <TableColumn fx:id="customerFirstNameColumn" prefWidth="147.0" text="First name" />
@@ -122,7 +120,7 @@
                               <Insets bottom="12.0" />
                            </VBox.margin>
                         </TableView>
-                        <HBox prefHeight="90.0" prefWidth="1320.0" spacing="20.0">
+                        <HBox prefHeight="42.0" prefWidth="1320.0" spacing="20.0">
                            <children>
                               <TextField fx:id="idCustomerTextField" text="Id" />
                               <TextField fx:id="customerFirstNameTextField" text="First name" />
@@ -139,32 +137,77 @@
                               <Insets bottom="3.0" left="30.0" right="3.0" top="3.0" />
                            </padding>
                         </HBox>
-                        <HBox prefHeight="123.0" prefWidth="1320.0" spacing="20.0">
+                        <HBox prefHeight="91.0" prefWidth="1320.0" spacing="20.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#newCustomerButtonPushed" text="Add Customer" />
                               <Button mnemonicParsing="false" onAction="#updateCustomerButtonPushed" text="Update Customer" />
                               <Button mnemonicParsing="false" onAction="#getCustomerButtonPushed" text="Get Customer By Id" />
+                              <Button mnemonicParsing="false" onAction="#getCustomerSQLInjectionButtonPushed" text="Get Customer By Id (permits SQL Injection))" />
                            </children>
                            <padding>
                               <Insets bottom="3.0" left="70.0" right="3.0" top="3.0" />
                            </padding>
                         </HBox>
-                        <HBox prefHeight="135.0" prefWidth="1320.0">
-                           <children>
-                              <Label fx:id="customerResponse" prefHeight="112.0" prefWidth="464.0" text="Response:">
-                                 <HBox.margin>
-                                    <Insets left="60.0" />
-                                 </HBox.margin></Label>
-                           </children>
-                        </HBox>
                      </children>
                   </VBox>
+                  <ScrollPane layoutX="-2.0" layoutY="702.0" prefHeight="194.0" prefWidth="1342.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Label fx:id="customerResponse" layoutX="137.0" layoutY="28.0" text="Response:" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
                </children></AnchorPane>
          </content>
       </Tab>
       <Tab text="Angajati">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <HBox prefHeight="77.0" prefWidth="1320.0">
+                     <children>
+                        <Button mnemonicParsing="false" text="&lt;" />
+                        <Button mnemonicParsing="false" text="&lt;&lt;" />
+                        <TextField text="Search name" />
+                        <Button mnemonicParsing="false" text="&gt;" />
+                        <Button mnemonicParsing="false" text="&gt;&gt;" />
+                     </children>
+                  </HBox>
+                  <VBox layoutY="67.0" prefHeight="757.0" prefWidth="1320.0">
+                     <children>
+                        <TableView prefHeight="437.0" prefWidth="1320.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="idStaff" />
+                            <TableColumn prefWidth="75.0" text="idBank" />
+                              <TableColumn prefWidth="112.0" text="First Name" />
+                              <TableColumn prefWidth="118.0" text="Last Name" />
+                              <TableColumn prefWidth="156.0" text="Birth" />
+                              <TableColumn prefWidth="161.0" text="City" />
+                              <TableColumn prefWidth="187.0" text="Email" />
+                              <TableColumn prefWidth="170.0" text="Phone number" />
+                              <TableColumn prefWidth="131.0" text="Salary" />
+                              <TableColumn prefWidth="134.0" text="Position" />
+                          </columns>
+                        </TableView>
+                        <HBox prefHeight="42.0" prefWidth="1320.0">
+                           <children>
+                              <Button mnemonicParsing="false" text="Increase salary with:" />
+                              <TextField text="with?" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="58.0" prefWidth="1320.0">
+                           <children>
+                              <Button mnemonicParsing="false" text="Get Employee of the month:" />
+                              <ComboBox fx:id="chooseMonth" opacity="0.72" prefHeight="25.0" prefWidth="148.0" promptText="Chose month" visibleRowCount="12" />
+                              <ComboBox fx:id="chooseDay" opacity="0.79" prefWidth="150.0" promptText="Choose year" />
+                           </children>
+                        </HBox>
+                        <Label text="Response:" />
+                     </children>
+                  </VBox>
+               </children></AnchorPane>
          </content>
       </Tab>
       <Tab text="Curs valutar">
@@ -207,7 +250,46 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Button layoutX="92.0" layoutY="90.0" mnemonicParsing="false" text="Button" />
+                  <VBox layoutY="-1.0" prefHeight="828.0" prefWidth="1320.0">
+                     <children>
+                        <HBox prefHeight="69.0" prefWidth="1320.0" />
+                        <TableView prefHeight="269.0" prefWidth="1320.0">
+                          <columns>
+                            <TableColumn prefWidth="121.0" text="idTransaction" />
+                            <TableColumn prefWidth="75.0" text="idBank" />
+                              <TableColumn prefWidth="87.0" text="idStaff" />
+                              <TableColumn prefWidth="124.0" text="IdAccountFrom" />
+                              <TableColumn prefWidth="107.0" text="IdAccountTo" />
+                              <TableColumn prefWidth="141.0" text="IdRate" />
+                              <TableColumn prefWidth="178.0" text="TransactionType" />
+                              <TableColumn prefWidth="190.0" text="TransactionDate" />
+                              <TableColumn prefWidth="126.0" text="TransactionHour" />
+                              <TableColumn prefWidth="170.0" text="MoneyAmount" />
+                          </columns>
+                        </TableView>
+                        <HBox prefHeight="58.0" prefWidth="1320.0">
+                           <children>
+                              <TextField text="idBank" />
+                              <TextField text="idStaff" />
+                              <TextField text="idFrom" />
+                              <TextField text="idTo" />
+                              <TextField text="currency" />
+                              <TextField text="transactionType" />
+                              <TextField text="value" />
+                              <TextField text="year" />
+                              <TextField text="month" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" text="Add transaction" />
+                              <Button mnemonicParsing="false" text="Get most active day" />
+                              <Button mnemonicParsing="false" text="Get transaction by id" />
+                              <Button mnemonicParsing="false" text="Get monthly money sum" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
          </content>

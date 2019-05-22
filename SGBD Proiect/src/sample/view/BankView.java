@@ -26,9 +26,7 @@ public class BankView{
 
     public static String getBankByIdButtonPushed(String id)
     {
-        if(bankController.getBankById(id) != null)
-            return bankController.getBankById(id).toString();
-        return "no content for this id";
+        return bankController.getBankById(id).toString();
     }
 
     public static void newBankButtonPushed(String city, String address, String name)

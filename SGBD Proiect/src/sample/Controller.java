@@ -59,6 +59,13 @@ public class Controller implements Initializable {
 
     @FXML private TextField customerFromIndex = new TextField();
 
+
+    //configure the transaction_hystory table
+    //@FXML private TableView<Transaction> transactionTableView;
+
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -87,8 +94,7 @@ public class Controller implements Initializable {
 
     }
 
-    public void showFromPage(String page)
-    {
+    public void showFromPage(String page){
         page = page.replaceAll(",", "");
         CustomerController customerController = new CustomerController();
 
@@ -97,23 +103,21 @@ public class Controller implements Initializable {
         ObservableList<Customer> customersAux = FXCollections.observableArrayList();
 
         for (String customer : customers) {
-            customersAux.add(customerController.getCustomerById(customer));
+            customersAux.add((Customer) customerController.getCustomerById(customer));
             System.out.println(customerController.getCustomerById(customer));
         }
 
         customerTableView.setItems(customersAux);
     }
 
-    private String addToStringAndRemainPozitive(String initial, int add)
-    {
+    private String addToStringAndRemainPozitive(String initial, int add) {
         int result = Integer.parseInt(initial.replaceAll(",", "")) + add;
         if(result <  1)
             result = 1;
         return String.valueOf(result);
     }
 
-    private void handlePages(int add)
-    {
+    private void handlePages(int add) {
         if(customerFromIndex.getText().equals(""))
         {
             if(add < 0)
@@ -164,26 +168,28 @@ public class Controller implements Initializable {
         showFromPage(page);
     }
 
+    public void getCustomerSQLInjectionButtonPushed(){
+        CustomerController customerController = new CustomerController();
+        customerResponse.setText(customerController.getCustomersWithIdForDemonstratingSQLInjection(idCustomerTextField.getText()).toString());
+    }
+
     public void getCustomerButtonPushed() {
         CustomerController customerController = new CustomerController();
         customerResponse.setText(customerController.getCustomerById(idCustomerTextField.getText()).toString());
     }
 
-     public void newCustomerButtonPushed(){
+    public void newCustomerButtonPushed(){
         CustomerController customerController = new CustomerController();
 
-        customerController.create(customerFirstNameTextField.getText(), customerLastNameTextField.getText(), customerCityTextField.getText(),  customerEmailTextField.getText(),
-                customerPhoneNumberTextField.getText(), Datas.extractDateInSQLFormFromLocalDate(customerDateOfBirthDateField.getValue()), "Normal", 0);
+        customerResponse.setText(customerController.create(customerFirstNameTextField.getText(), customerLastNameTextField.getText(), customerCityTextField.getText(),  customerEmailTextField.getText(),
+                customerPhoneNumberTextField.getText(), Datas.extractDateInSQLFormFromLocalDate(customerDateOfBirthDateField.getValue()), "Normal", 0));
     }
-
-
 
     //(int id, String firstName, String lastName, String city, String email, String phoneNumber)
     public void updateCustomerButtonPushed() {
         CustomerController customerController = new CustomerController();
-        System.out.println("em: "  + customerEmailTextField.getText());
-        customerController.update(idCustomerTextField.getText(), customerFirstNameTextField.getText(), customerLastNameTextField.getText(), customerCityTextField.getText(),
-                customerEmailTextField.getText(), customerPhoneNumberTextField.getText());
+        customerResponse.setText(customerController.update(idCustomerTextField.getText(), customerFirstNameTextField.getText(), customerLastNameTextField.getText(), customerCityTextField.getText(),
+                customerEmailTextField.getText(), customerPhoneNumberTextField.getText()));
     }
 
     public void newBankButtonPushed(){
@@ -201,6 +207,4 @@ public class Controller implements Initializable {
     public void getBankButtonPushed() {
         bankResponse.setText(BankView.getBankByIdButtonPushed(idBankTextField.getText()));
     }
-
-
 }

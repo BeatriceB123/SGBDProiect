@@ -34,6 +34,7 @@ public class TransactionController {
         System.out.println(output);
     }
 
+    //aduna toate tranzactiile din luna curenta
     public void monthlyMoneySum(int monthNr, int yearNr) throws SQLException {
         Connection con = Database.getConnection();
         String call = "{ ? = call monthly_money_sum(?,?) }";

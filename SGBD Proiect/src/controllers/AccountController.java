@@ -47,15 +47,14 @@ public class AccountController {
         System.out.println(output);
     }
 
-    public void check(int idAccount) throws SQLException {
+    public String check(int idAccount) throws SQLException {
         Connection con = Database.getConnection();
-        String call = "{ ? = call account_check(?) }";
+        String call = "{ call account_check(?,?) }";
         CallableStatement statement = con.prepareCall(call);
-        statement.registerOutParameter(1, Types.VARCHAR);
-        statement.setInt(2, idAccount);
+        statement.setInt(1, idAccount);
+        statement.registerOutParameter(2, Types.VARCHAR);
         statement.execute();
-        String output = statement.getString(1);
-        System.out.println(output);
+        return (statement.getString(2));
     }
 
     public void findById(int id) throws SQLException{

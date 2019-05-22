@@ -21,7 +21,7 @@ public class CustomerView {
         customerController = new CustomerController();
         ArrayList<String> customersIds = customerController.getCustomersIds();
         for (String customerId : customersIds) {
-            Customer customer = customerController.getCustomerById(customerId);
+            Customer customer = (Customer) customerController.getCustomerById(customerId);
             customers.add(customer);
         }
         return customers;

@@ -22,11 +22,11 @@ public class BankController {
             System.out.println(output);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
 
-    public void update(String id, String city, String address, String name){
+    public String update(String id, String city, String address, String name){
         Connection con = Database.getConnection();
         String call = "{ ? = call update_bank(?,?,?,?) }";
         CallableStatement statement = null;
@@ -41,8 +41,10 @@ public class BankController {
             String output = statement.getString(1);
             System.out.println(output);
         } catch (SQLException e) {
-            e.printStackTrace();
+            String[] result = e.getMessage().split("\\R", 2);
+            return result[0];
         }
+        return "updated";
     }
 
     public void findById(int id) throws SQLException{
@@ -87,4 +89,5 @@ public class BankController {
 
         return result;
     }
+
 }
