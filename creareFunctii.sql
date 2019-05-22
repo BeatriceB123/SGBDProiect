@@ -242,23 +242,22 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE FUNCTION account_check(p_id_account IN INT)
-RETURN VARCHAR2
+CREATE OR REPLACE PROCEDURE account_check(p_id_account IN INT, p_message OUT VARCHAR2)
 AS
   v_nr_transactions INT;
   v_today DATE;
 BEGIN
   IF (p_id_account IS NULL) THEN
-    return 'Account id cannot be null';
+    p_message := 'Account id cannot be null';
   END IF;
   v_today := to_date(sysdate,'DD-MON-YY');
   SELECT * INTO v_nr_transactions FROM (SELECT COUNT(*) FROM transaction_history WHERE id_account_from = p_id_account AND transaction_date LIKE v_today);
   IF(v_nr_transactions > 10) THEN
   UPDATE bank_account SET account_type = 'Frozen' WHERE id_account = p_id_account;
   COMMIT;
-  return 'Too many transactions registered today. Account has been frozen.';
+  p_message := 'Too many transactions registered today. Account has been frozen.';
   END IF;
-  return 'Status is ok, only '||v_nr_transactions||' transactions found for today';
+  p_message := 'Status is ok, only '||v_nr_transactions||' transactions found for today';
 END;
 /
 
