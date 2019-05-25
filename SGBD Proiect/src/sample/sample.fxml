@@ -354,8 +354,8 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <VBox layoutX="325.0" layoutY="87.0" prefHeight="200.0" prefWidth="100.0" />
-                  <PieChart fx:id="pieChartForRegionStatistics" layoutX="3.0" prefHeight="621.0" prefWidth="1314.0" />
-                  <Button layoutX="45.0" layoutY="545.0" mnemonicParsing="false" text="Refresh chart" />
+                  <PieChart fx:id="pieChartForRegionStatistics" layoutX="3.0" prefHeight="621.0" prefWidth="1314.0" snapToPixel="false" />
+                  <Button layoutX="45.0" layoutY="545.0" mnemonicParsing="false" onAction="#refreshChartRegionStatisticsButtonPushed" text="Refresh chart" />
                </children>
             </AnchorPane>
         </content>
