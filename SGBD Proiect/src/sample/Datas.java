@@ -7,8 +7,26 @@ import java.util.*;
 public class Datas {
     public static ArrayList<String> monthsLongForm = new ArrayList<String>(Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"));
 
-    public static final ArrayList<Integer> days = new ArrayList<Integer>(
-            Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19));
+    public static Map<String, Integer> monthsLongFormDecoder = Collections.unmodifiableMap(
+            new HashMap<String, Integer>() {{
+                put("January", 1);
+                put("February", 2);
+                put("March", 3);
+                put("April", 4);
+                put("May", 5);
+                put("June", 6);
+                put("July", 7);
+                put("August", 8);
+                put("September", 9);
+                put("October", 10);
+                put("November", 11);
+                put("December", 12);
+            }});
+
+
+
+    public static final ArrayList<Integer> years = new ArrayList<Integer>(
+            Arrays.asList(1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020));
 
     //04-DEC-56  //dd-MMM-yy
     //1968-02-05 00:00:00
@@ -29,40 +47,6 @@ public class Datas {
                 put("10", "OCT");
                 put("11", "NOV");
                 put("12", "DEC");
-            }});
-
-    public static Map<Integer, String> Numbers = Collections.unmodifiableMap(
-            new HashMap<Integer, String>() {{
-                put(0, "0");
-                put(1, "1");
-                put(2, "2");
-                put(3, "3");
-                put(4, "4");
-                put(5, "5");
-                put(6, "6");
-                put(7, "7");
-                put(8, "8");
-                put(9, "9");
-                put(10, "10");
-                put(11, "11");
-                put(12, "12");
-                put(13, "13");
-                put(14, "14");
-                put(15, "15");
-                put(16, "16");
-                put(17, "17");
-                put(18, "18");
-                put(19, "19");
-                put(20, "20");
-                put(21, "21");
-                put(22, "22");
-                put(23, "23");
-                put(24, "24");
-                put(25, "25");
-                put(26, "26");
-                put(27, "27");
-                put(28, "28");
-                put(29, "29");
             }});
 
 
@@ -91,5 +75,9 @@ public class Datas {
                 .append(dateInitial.charAt(3));
 
         return dateinSql.toString();
+    }
+
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 }

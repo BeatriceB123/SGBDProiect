@@ -1,16 +1,17 @@
 package sample;
 
 import controllers.CustomerController;
+import controllers.StaffController;
 import entities.Bank;
 import entities.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.converter.NumberStringConverter;
+import org.apache.velocity.runtime.directive.Parse;
 import sample.view.BankView;
 
 import java.net.URL;
@@ -18,6 +19,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import static sample.Datas.isNumeric;
+import static sample.Datas.monthsLongForm;
 import static sample.view.BankView.*;
 
 public class Controller implements Initializable {
@@ -61,18 +64,23 @@ public class Controller implements Initializable {
 
     @FXML private TextField customerFromIndex = new TextField();
 
+//    private final ObservableList<PieChart.Data> details = FXCollections.observableArrayList(
+//                    new PieChart.Data("Grapefruit", 13),
+//                    new PieChart.Data("Oranges", 25),
+//                    new PieChart.Data("Plums", 10),
+//                    new PieChart.Data("Pears", 22),
+//                    new PieChart.Data("Apples", 30));
+//
+//    @FXML private PieChart pieChart;
 
-    //configure the transaction_hystory table
-    //@FXML private TableView<Transaction> transactionTableView;
+    @FXML private TextField idEmployeeToIncreaseSalary;
+    @FXML private TextField amountToIncreaseSalary;
+    @FXML private Label staffResponse;
+    @FXML private ComboBox monthListForEmployee = new ComboBox();
+    @FXML private ComboBox yearListForEmployee = new ComboBox();
+    @FXML private TextField rewardEmployeeWith;
+    @FXML private TextField idForEmployeeToFind;
 
-    private final ObservableList<PieChart.Data> details = FXCollections.observableArrayList(
-                    new PieChart.Data("Grapefruit", 13),
-                    new PieChart.Data("Oranges", 25),
-                    new PieChart.Data("Plums", 10),
-                    new PieChart.Data("Pears", 22),
-                    new PieChart.Data("Apples", 30));
-
-    @FXML private PieChart pieChart;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -99,17 +107,43 @@ public class Controller implements Initializable {
         //load data
         bankTableView.setItems(banks);
 
-//        details.addAll(new PieChart.Data("a", 25));
-//        details.addAll(new PieChart.Data("b", 10));
-//        details.addAll(new PieChart.Data("c", 20));
-//        details.addAll(new PieChart.Data("d", 30));
-//        details.addAll(new PieChart.Data("e", 25));
-        pieChart = new PieChart();
-        pieChart.setData(details);
-        pieChart.setTitle("Regional statistics");
+        monthListForEmployee.getItems().addAll(Datas.monthsLongForm);
+        yearListForEmployee.getItems().addAll(Datas.years);
+
 
 
     }
+
+    public void findEmplyeeByIdButtonPushed()
+    {
+        StaffController staffController = new StaffController();
+        staffResponse.setText(isNumeric(idForEmployeeToFind.getText())?staffController.findById(Integer.parseInt(idForEmployeeToFind.getText())):"invalid id");
+    }
+
+    public void getEmployeeOfTheMonthButtonPushed()
+    {
+        StaffController staffController = new StaffController();
+        int month = Datas.monthsLongFormDecoder.get(monthListForEmployee.getValue().toString());
+        int year = Integer.parseInt(yearListForEmployee.getValue().toString());
+        int reward= Integer.parseInt(rewardEmployeeWith.getText());
+        staffResponse.setText(staffController.employeeOfTheMonth(month, year, reward));
+    }
+
+    public void increaseSalaryButtonPushed()
+    {
+        StaffController staffController = new StaffController();
+        if(!Datas.isNumeric(idEmployeeToIncreaseSalary.getText()) || !Datas.isNumeric(amountToIncreaseSalary.getText()))
+        {
+            staffResponse.setText("wrong parameters");
+        }
+        else
+        {
+            int id = Integer.parseInt(idEmployeeToIncreaseSalary.getText());
+            int amount = Integer.parseInt(amountToIncreaseSalary.getText());
+            staffResponse.setText(staffController.salaryIncrease(id, amount));
+        }
+    }
+
 
     private void showFromPage(String page){
         page = page.replaceAll(",", "");
