@@ -77,12 +77,22 @@ public class Controller implements Initializable {
     @FXML private TextField rewardEmployeeWith;
     @FXML private TextField idForEmployeeToFind;
 
-    @FXML private PieChart pieChart;
+    @FXML private PieChart pieChartForRegionStatistics;
+    @FXML private static Label regionStatisticsResponse;
 
-    private ObservableList<PieChart.Data> getData(){
+    @FXML private PieChart pieChartForCityStatistics;
+    @FXML private static Label cityStatisticsResponse;
+
+    private ObservableList<PieChart.Data> getDataForCityStatistics(){
 
         StatisticsController statisticsController = new StatisticsController();
-        return statisticsController.getData();
+        return statisticsController.getDataForCityStatistics();
+    }
+
+    private ObservableList<PieChart.Data> getDataForRegionStatistics(){
+
+        StatisticsController statisticsController = new StatisticsController();
+        return statisticsController.getDataForRegionStatistics();
     }
 
     @Override
@@ -113,9 +123,19 @@ public class Controller implements Initializable {
         monthListForEmployee.getItems().addAll(Datas.monthsLongForm);
         yearListForEmployee.getItems().addAll(Datas.years);
 
+        pieChartForCityStatistics.setData(getDataForCityStatistics());
+        pieChartForRegionStatistics.setData(getDataForRegionStatistics());
 
-        pieChart.setData(getData());
+    }
 
+    public void refreshChartRegionStatisticsButtonPushed()
+    {
+        pieChartForCityStatistics.setData(getDataForRegionStatistics());
+    }
+
+    public void refreshChartCityStatisticsButtonPushed()
+    {
+        pieChartForCityStatistics.setData(getDataForCityStatistics());
     }
 
     public void findEmplyeeByIdButtonPushed()
