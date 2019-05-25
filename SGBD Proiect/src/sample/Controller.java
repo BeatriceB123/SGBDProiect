@@ -2,12 +2,15 @@ package sample;
 
 import controllers.CustomerController;
 import controllers.StaffController;
+import controllers.StatisticsController;
 import entities.Bank;
 import entities.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.converter.NumberStringConverter;
@@ -24,6 +27,7 @@ import static sample.Datas.monthsLongForm;
 import static sample.view.BankView.*;
 
 public class Controller implements Initializable {
+
 
     private static int numberOfCustomersInPage = 20;
     private static int numberOfStaffsInPage = 20;
@@ -64,14 +68,6 @@ public class Controller implements Initializable {
 
     @FXML private TextField customerFromIndex = new TextField();
 
-//    private final ObservableList<PieChart.Data> details = FXCollections.observableArrayList(
-//                    new PieChart.Data("Grapefruit", 13),
-//                    new PieChart.Data("Oranges", 25),
-//                    new PieChart.Data("Plums", 10),
-//                    new PieChart.Data("Pears", 22),
-//                    new PieChart.Data("Apples", 30));
-//
-//    @FXML private PieChart pieChart;
 
     @FXML private TextField idEmployeeToIncreaseSalary;
     @FXML private TextField amountToIncreaseSalary;
@@ -81,6 +77,13 @@ public class Controller implements Initializable {
     @FXML private TextField rewardEmployeeWith;
     @FXML private TextField idForEmployeeToFind;
 
+    @FXML private PieChart pieChart;
+
+    private ObservableList<PieChart.Data> getData(){
+
+        StatisticsController statisticsController = new StatisticsController();
+        return statisticsController.getData();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -111,6 +114,7 @@ public class Controller implements Initializable {
         yearListForEmployee.getItems().addAll(Datas.years);
 
 
+        pieChart.setData(getData());
 
     }
 
