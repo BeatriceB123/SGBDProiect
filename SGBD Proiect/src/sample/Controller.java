@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.converter.NumberStringConverter;
@@ -21,7 +22,8 @@ import static sample.view.BankView.*;
 
 public class Controller implements Initializable {
 
-    public static int numberOfCustomersInPage = 20;
+    private static int numberOfCustomersInPage = 20;
+    private static int numberOfStaffsInPage = 20;
 
     //configure the bank table
     @FXML private TableView<Bank> bankTableView;
@@ -63,8 +65,14 @@ public class Controller implements Initializable {
     //configure the transaction_hystory table
     //@FXML private TableView<Transaction> transactionTableView;
 
+    private final ObservableList<PieChart.Data> details = FXCollections.observableArrayList(
+                    new PieChart.Data("Grapefruit", 13),
+                    new PieChart.Data("Oranges", 25),
+                    new PieChart.Data("Plums", 10),
+                    new PieChart.Data("Pears", 22),
+                    new PieChart.Data("Apples", 30));
 
-
+    @FXML private PieChart pieChart;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -91,10 +99,19 @@ public class Controller implements Initializable {
         //load data
         bankTableView.setItems(banks);
 
+//        details.addAll(new PieChart.Data("a", 25));
+//        details.addAll(new PieChart.Data("b", 10));
+//        details.addAll(new PieChart.Data("c", 20));
+//        details.addAll(new PieChart.Data("d", 30));
+//        details.addAll(new PieChart.Data("e", 25));
+        pieChart = new PieChart();
+        pieChart.setData(details);
+        pieChart.setTitle("Regional statistics");
+
 
     }
 
-    public void showFromPage(String page){
+    private void showFromPage(String page){
         page = page.replaceAll(",", "");
         CustomerController customerController = new CustomerController();
 

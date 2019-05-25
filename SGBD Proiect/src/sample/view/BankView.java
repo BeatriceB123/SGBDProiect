@@ -26,7 +26,10 @@ public class BankView{
 
     public static String getBankByIdButtonPushed(String id)
     {
-        return bankController.getBankById(id).toString();
+        String bank = bankController.getBankById(id).toString();
+        if(!bank.equals(""))
+            return bank;
+        return "invalid id";
     }
 
     public static void newBankButtonPushed(String city, String address, String name)
@@ -42,14 +45,5 @@ public class BankView{
     {
         bankController.update(id, city, address, name);
         banks = getBanks();
-    }
-
-    public void deleteBankButtonPushed() {
-        //dosen't affect the data base.
-//        ObservableList<Bank> selectedRows;
-//        selectedRows = bankTableView.getSelectionModel().getSelectedItems();
-//        for (Bank bank : selectedRows) {
-//            banks.remove(bank);
-//        }
     }
 }

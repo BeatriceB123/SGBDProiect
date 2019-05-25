@@ -73,6 +73,8 @@ public class Bank {
 
     @Override
     public String toString() {
+        if (idBank.toString().equals("StringProperty [value: ]"))
+            return "invalid bank";
         return "Bank Id: " + getIdBank() + ", city: " + getCity() + ", address: " +
                 getAddress() + ", name: " + getName();
     }

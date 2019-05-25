@@ -30,6 +30,7 @@ public class BankController {
         Connection con = Database.getConnection();
         String call = "{ ? = call update_bank(?,?,?,?) }";
         CallableStatement statement = null;
+        System.out.println("Update banca");
         try {
             statement = con.prepareCall(call);
             statement.registerOutParameter(1, Types.VARCHAR);
@@ -40,6 +41,7 @@ public class BankController {
             statement.execute();
             String output = statement.getString(1);
             System.out.println(output);
+            System.out.println("HERE");
         } catch (SQLException e) {
             String[] result = e.getMessage().split("\\R", 2);
             return result[0];
@@ -68,7 +70,8 @@ public class BankController {
         } catch (SQLException e) {
             //e.printStackTrace();
         }
-        return null;
+        System.out.println("ASD");
+        return new Bank();
     }
 
     public ArrayList<String> getBanksIds(){
