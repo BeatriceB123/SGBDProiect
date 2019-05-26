@@ -12,11 +12,12 @@ import java.util.Map;
 
 
 public class StatisticsController {
-    private ObservableList<PieChart.Data> dataForCityStatistics= FXCollections.observableArrayList();
-    private ObservableList<PieChart.Data> dataForRegionStatistics= FXCollections.observableArrayList();
+    private ObservableList<PieChart.Data> dataForCityStatistics = FXCollections.observableArrayList();
+    private ObservableList<PieChart.Data> dataForRegionStatistics = FXCollections.observableArrayList();
 
     private void initializeDataAboutCity()
     {
+        dataForCityStatistics = FXCollections.observableArrayList();
         Map<String, Integer> dataFromDatabase = getCityTransactionDatasAsMap();
         for (Map.Entry<String, Integer> entry : dataFromDatabase.entrySet()) {
             System.out.println(entry.getKey() + "/" + entry.getValue());
@@ -67,6 +68,7 @@ public class StatisticsController {
 
     private void initializeDataAboutRegion()
     {
+        dataForRegionStatistics = FXCollections.observableArrayList();
         Map<String, Integer> dataFromDatabase = getRegionTransactionDatasAsMap();
         for (Map.Entry<String, Integer> entry : dataFromDatabase.entrySet()){
             System.out.println(entry.getKey() + "/" + entry.getValue());

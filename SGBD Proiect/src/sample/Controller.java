@@ -23,11 +23,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static sample.Datas.isNumeric;
-import static sample.Datas.monthsLongForm;
 import static sample.view.BankView.*;
 
 public class Controller implements Initializable {
-
+    private StatisticsController statisticsController = new StatisticsController();
 
     private static int numberOfCustomersInPage = 20;
     private static int numberOfStaffsInPage = 20;
@@ -78,22 +77,11 @@ public class Controller implements Initializable {
     @FXML private TextField idForEmployeeToFind;
 
     @FXML private PieChart pieChartForRegionStatistics;
-    @FXML private static Label regionStatisticsResponse;
+    @FXML private Label regionStatisticsResponse;
 
     @FXML private PieChart pieChartForCityStatistics;
-    @FXML private static Label cityStatisticsResponse;
+    @FXML private Label cityStatisticsResponse;
 
-    private ObservableList<PieChart.Data> getDataForCityStatistics(){
-
-        StatisticsController statisticsController = new StatisticsController();
-        return statisticsController.getDataForCityStatistics();
-    }
-
-    private ObservableList<PieChart.Data> getDataForRegionStatistics(){
-
-        StatisticsController statisticsController = new StatisticsController();
-        return statisticsController.getDataForRegionStatistics();
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -123,29 +111,31 @@ public class Controller implements Initializable {
         monthListForEmployee.getItems().addAll(Datas.monthsLongForm);
         yearListForEmployee.getItems().addAll(Datas.years);
 
-        pieChartForCityStatistics.setData(getDataForCityStatistics());
-        pieChartForRegionStatistics.setData(getDataForRegionStatistics());
+        refreshChartCityStatisticsButtonPushed();
+        refreshChartRegionStatisticsButtonPushed();
 
     }
 
-    public void refreshChartRegionStatisticsButtonPushed()
-    {
-        pieChartForCityStatistics.setData(getDataForRegionStatistics());
+    public void refreshChartRegionStatisticsButtonPushed() {
+        long startTime = System.currentTimeMillis();
+        pieChartForRegionStatistics.setData(statisticsController.getDataForRegionStatistics());
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        regionStatisticsResponse.setText("Total time elapsed: " + (double)estimatedTime/1000 + " seconds");
     }
 
-    public void refreshChartCityStatisticsButtonPushed()
-    {
-        pieChartForCityStatistics.setData(getDataForCityStatistics());
+    public void refreshChartCityStatisticsButtonPushed() {
+        long startTime = System.currentTimeMillis();
+        pieChartForCityStatistics.setData(statisticsController.getDataForCityStatistics());
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        cityStatisticsResponse.setText("Total time elapsed: " + (double)estimatedTime/1000 + " seconds");
     }
 
-    public void findEmplyeeByIdButtonPushed()
-    {
+    public void findEmplyeeByIdButtonPushed() {
         StaffController staffController = new StaffController();
         staffResponse.setText(isNumeric(idForEmployeeToFind.getText())?staffController.findById(Integer.parseInt(idForEmployeeToFind.getText())):"invalid id");
     }
 
-    public void getEmployeeOfTheMonthButtonPushed()
-    {
+    public void getEmployeeOfTheMonthButtonPushed() {
         StaffController staffController = new StaffController();
         int month = Datas.monthsLongFormDecoder.get(monthListForEmployee.getValue().toString());
         int year = Integer.parseInt(yearListForEmployee.getValue().toString());
@@ -153,15 +143,11 @@ public class Controller implements Initializable {
         staffResponse.setText(staffController.employeeOfTheMonth(month, year, reward));
     }
 
-    public void increaseSalaryButtonPushed()
-    {
+    public void increaseSalaryButtonPushed() {
         StaffController staffController = new StaffController();
-        if(!Datas.isNumeric(idEmployeeToIncreaseSalary.getText()) || !Datas.isNumeric(amountToIncreaseSalary.getText()))
-        {
+        if(!Datas.isNumeric(idEmployeeToIncreaseSalary.getText()) || !Datas.isNumeric(amountToIncreaseSalary.getText())) {
             staffResponse.setText("wrong parameters");
-        }
-        else
-        {
+        } else {
             int id = Integer.parseInt(idEmployeeToIncreaseSalary.getText());
             int amount = Integer.parseInt(amountToIncreaseSalary.getText());
             staffResponse.setText(staffController.salaryIncrease(id, amount));
@@ -193,20 +179,15 @@ public class Controller implements Initializable {
     }
 
     private void handlePages(int add) {
-        if(customerFromIndex.getText().equals(""))
-        {
+        if(customerFromIndex.getText().equals("")) {
             if(add < 0)
             {
                 showFromPage("1");
                 customerFromIndex.setText("1");
-            }
-            else
-            {
+            } else {
                 lastPageCustomerButtonPushed();
             }
-        }
-        else
-        {
+        } else {
             String page = addToStringAndRemainPozitive(customerFromIndex.getText(), add);
             showFromPage(page);
             customerFromIndex.setText(page);
