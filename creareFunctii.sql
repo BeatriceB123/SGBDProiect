@@ -7,6 +7,51 @@ on transaction_history(id_staff, transaction_date);
 CREATE INDEX eotm2
 on staff(job_position, id_staff); 
 
+CREATE OR REPLACE FUNCTION add_real_exchange_rate
+RETURN VARCHAR2
+AS
+  pieces utl_http.html_pieces;
+  GBP_to_EUR exchange_rate.to_EUR%type;
+  GBP_to_RON exchange_rate.to_RON%type;
+  GBP_to_RUB exchange_rate.to_RUB%type;
+  EUR_to_GBP exchange_rate.to_GBP%type;
+  EUR_to_RON exchange_rate.to_RON%type;
+  EUR_to_RUB exchange_rate.to_RUB%type;
+  RON_to_GBP exchange_rate.to_GBP%type;
+  RON_to_EUR exchange_rate.to_EUR%type;
+  RON_to_RUB exchange_rate.to_RUB%type;
+  RUB_to_GBP exchange_rate.to_GBP%type;
+  RUB_to_EUR exchange_rate.to_EUR%type;
+  RUB_to_RON exchange_rate.to_RON%type;
+  v_id exchange_rate.id_rate%type;
+BEGIN 
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=GBP'); 
+  GBP_to_EUR := SUBSTR(pieces(1), INSTR(pieces(1), 'EUR') + 5, 5);
+  GBP_to_RON := SUBSTR(pieces(1), INSTR(pieces(1), 'RON') + 5, 5);
+  GBP_to_RUB := SUBSTR(pieces(1), INSTR(pieces(1), 'RUB') + 5, 5);
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=EUR'); 
+  EUR_to_GBP := SUBSTR(pieces(1), INSTR(pieces(1), 'GBP') + 5, 5);
+  EUR_to_RON := SUBSTR(pieces(1), INSTR(pieces(1), 'RON') + 5, 5);
+  EUR_to_RUB := SUBSTR(pieces(1), INSTR(pieces(1), 'RUB') + 5, 5);
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=RON'); 
+  RON_to_GBP := SUBSTR(pieces(1), INSTR(pieces(1), 'GBP') + 5, 5);
+  RON_to_EUR := SUBSTR(pieces(1), INSTR(pieces(1), 'EUR') + 5, 5);
+  RON_to_RUB := SUBSTR(pieces(1), INSTR(pieces(1), 'RUB') + 5, 5);
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=RUB'); 
+  RUB_to_GBP := SUBSTR(pieces(1), INSTR(pieces(1), 'GBP') + 5, 5);
+  RUB_to_EUR := SUBSTR(pieces(1), INSTR(pieces(1), 'EUR') + 5, 5);
+  RUB_to_RON := SUBSTR(pieces(1), INSTR(pieces(1), 'RON') + 5, 5);
+  SELECT * INTO v_id FROM (SELECT count(*) FROM exchange_rate);
+  v_id := v_id + 1;
+  INSERT INTO exchange_rate VALUES (v_id, 'GBP', 1, GBP_to_EUR, GBP_to_RON, GBP_to_RUB, NULL, NULL);
+  INSERT INTO exchange_rate VALUES (v_id + 1, 'EUR', EUR_to_GBP, 1, EUR_to_RON, EUR_to_RUB, NULL, NULL);
+  INSERT INTO exchange_rate VALUES (v_id + 2, 'RON', RON_to_GBP, RON_to_EUR, 1, RON_to_RUB, NULL, NULL);
+  INSERT INTO exchange_rate VALUES (v_id + 3, 'RUB', RUB_to_GBP, RUB_to_EUR, RUB_to_RON, 1, NULL, NULL);
+  COMMIT;
+  return 'Successfully added the new exchange rates.';
+END;
+/
+
 CREATE OR REPLACE FUNCTION new_customer(
     p_f_name IN VARCHAR2, p_l_name IN VARCHAR2, p_city IN VARCHAR2, p_email IN VARCHAR2, p_phone_number IN VARCHAR2, p_date_of_birth IN DATE, p_account_type IN VARCHAR2, p_value IN INT)
 RETURN VARCHAR2
