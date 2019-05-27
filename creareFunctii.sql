@@ -7,6 +7,55 @@ on transaction_history(id_staff, transaction_date);
 CREATE INDEX eotm2
 on staff(job_position, id_staff); 
 
+CREATE OR REPLACE FUNCTION generate_statement(p_id_account IN INT)
+RETURN VARCHAR2
+AS
+  v_id_customer bank_account.id_customer%type;
+  v_fisier UTL_FILE.FILE_TYPE;
+  v_f_name customer.f_name%type;
+  v_l_name customer.l_name%type;
+  CURSOR c_client_transactions IS
+    SELECT id_bank, id_account_from, id_account_to, transaction_type, transaction_date, transaction_hour, money_amount FROM transaction_history 
+      WHERE id_account_from = p_id_account OR id_account_to = p_id_account;
+  CURSOR c_client_account IS
+    SELECT account_type, monetary_value FROM bank_account WHERE id_account = p_id_account;
+BEGIN
+  SELECT id_customer INTO v_id_customer FROM bank_account 
+    WHERE id_account = p_id_account AND ROWNUM<2;
+  SELECT f_name INTO v_f_name FROM customer WHERE id_customer = v_id_customer;
+  SELECT l_name INTO v_l_name FROM customer WHERE id_customer = v_id_customer;
+  v_fisier := UTL_FILE.FOPEN('MYDIR','statement.txt','W');
+  UTL_FILE.PUTF(v_fisier, 'First name: ' );
+  UTL_FILE.PUTF(v_fisier, v_f_name || chr(13) || chr(10) );
+  UTL_FILE.PUTF(v_fisier, 'Last name: ' );
+  UTL_FILE.PUTF(v_fisier, v_l_name || chr(13) || chr(10) );
+  FOR v_std_linie IN c_client_account LOOP
+    UTL_FILE.PUTF(v_fisier, 'Bank account type: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.account_type || chr(13) || chr(10) );
+    UTL_FILE.PUTF(v_fisier, 'Monetary value of account: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.monetary_value || ' RON' || chr(13) || chr(10) );
+  END LOOP;
+  FOR v_std_linie IN c_client_transactions LOOP
+    UTL_FILE.PUTF(v_fisier, 'Bank id: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.id_bank || ' / ' );
+    UTL_FILE.PUTF(v_fisier, 'Id deponent: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.id_account_from || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Id depozitar: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.id_account_to || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Transaction type: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.transaction_type || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Transaction date: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.transaction_date || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Transaction hour: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.transaction_hour || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Money amount: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.money_amount || chr(13) || chr(10));
+  END LOOP;
+  UTL_FILE.FCLOSE(v_fisier);
+  return 'Successfully generated statement for given account';
+END;
+/
+
 CREATE OR REPLACE FUNCTION add_real_exchange_rate
 RETURN VARCHAR2
 AS
