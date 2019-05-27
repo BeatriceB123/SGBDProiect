@@ -1,21 +1,19 @@
 package sample;
 
-import controllers.CustomerController;
-import controllers.StaffController;
-import controllers.StatisticsController;
+import controllers.*;
 import entities.Bank;
 import entities.Customer;
+import entities.ExchangeRate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.converter.NumberStringConverter;
-import org.apache.velocity.runtime.directive.Parse;
 import sample.view.BankView;
+import sample.view.CustomerView;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -27,9 +25,12 @@ import static sample.view.BankView.*;
 
 public class Controller implements Initializable {
     private StatisticsController statisticsController = new StatisticsController();
+    private ExchangeRateController exchangeRateController = new ExchangeRateController();
+    private AccountController accountController = new AccountController();
 
-    private static int numberOfCustomersInPage = 20;
-    private static int numberOfStaffsInPage = 20;
+    public static ObservableList<ExchangeRate> exchangeRates = getExchangesRates();
+
+    //private static int numberOfStaffsInPage = 20;
 
     //configure the bank table
     @FXML private TableView<Bank> bankTableView;
@@ -37,6 +38,7 @@ public class Controller implements Initializable {
     @FXML private TableColumn<Bank, String> bankCityColumn;
     @FXML private TableColumn<Bank, String> bankAddressColumn;
     @FXML private TableColumn<Bank, Integer> idBankColumn;
+
     //These instance variables are used to create new Bank objects
     @FXML private TextField bankNameTextField;
     @FXML private TextField bankCityTextField;
@@ -55,6 +57,7 @@ public class Controller implements Initializable {
     @FXML private TableColumn<Customer, LocalDate> customerBirthColumn;
     @FXML private TableColumn<Customer, LocalDate> customerCreateAccountColumn;
     @FXML private TableColumn<Customer, LocalDate> customerUpdateAccountColumn;
+
     //These instance variables are used to create new Bank objects
     @FXML private TextField idCustomerTextField;
     @FXML private TextField customerFirstNameTextField;
@@ -66,7 +69,6 @@ public class Controller implements Initializable {
     @FXML private Label customerResponse;
 
     @FXML private TextField customerFromIndex = new TextField();
-
 
     @FXML private TextField idEmployeeToIncreaseSalary;
     @FXML private TextField amountToIncreaseSalary;
@@ -82,6 +84,28 @@ public class Controller implements Initializable {
     @FXML private PieChart pieChartForCityStatistics;
     @FXML private Label cityStatisticsResponse;
 
+    //(int gbp, int eur, int ron, int rub)
+    @FXML private TableView<ExchangeRate> exchangeRateTableViewFromGBP;
+    @FXML private TableView<ExchangeRate> exchangeRateTableViewFromEUR;
+    @FXML private TableView<ExchangeRate> exchangeRateTableViewFromRON;
+    @FXML private TableView<ExchangeRate> exchangeRateTableViewFromRUB;
+
+    @FXML private  TableColumn<ExchangeRate, String> gbpToEur;
+    @FXML private  TableColumn<ExchangeRate, String> gbpToRon;
+    @FXML private  TableColumn<ExchangeRate, String> gbpToRub;
+    @FXML private  TableColumn<ExchangeRate, String> eurToGbp;
+    @FXML private  TableColumn<ExchangeRate, String> eurToRon;
+    @FXML private  TableColumn<ExchangeRate, String> eurToRub;
+    @FXML private  TableColumn<ExchangeRate, String> ronToGbp;
+    @FXML private  TableColumn<ExchangeRate, String> ronToEur;
+    @FXML private  TableColumn<ExchangeRate, String> ronToRub;
+    @FXML private  TableColumn<ExchangeRate, String> rubToGbp;
+    @FXML private  TableColumn<ExchangeRate, String> rubToEur;
+    @FXML private  TableColumn<ExchangeRate, String> rubToRon;
+
+    //accountController
+    @FXML private TextField idAccount;
+    @FXML private Label accountResponse;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -111,9 +135,59 @@ public class Controller implements Initializable {
         monthListForEmployee.getItems().addAll(Datas.monthsLongForm);
         yearListForEmployee.getItems().addAll(Datas.years);
 
-        refreshChartCityStatisticsButtonPushed();
-        refreshChartRegionStatisticsButtonPushed();
+        //refreshChartCityStatisticsButtonPushed();
+        //refreshChartRegionStatisticsButtonPushed();
 
+        //set up the columns in the exchange rate table //(int gbp, int eur, int ron, int rub)
+        gbpToEur.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("gbpToEur"));
+        gbpToRon.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("gbpToRon"));
+        gbpToRub.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("gbpToRub"));
+
+        eurToGbp.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("eurToGbp"));
+        eurToRon.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("eurToRon"));
+        eurToRub.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("eurToRub"));
+
+        ronToGbp.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("ronToGbp"));
+        ronToEur.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("ronToEur"));
+        ronToRub.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("ronToRub"));
+
+        rubToGbp.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("rubToGbp"));
+        rubToEur.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("rubToEur"));
+        rubToRon.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("rubToRon"));
+
+
+
+
+    }
+
+
+    public void genrateStatementAccountButtonPushed(){
+        accountResponse.setText(accountController.generateStatement(Integer.parseInt(idAccount.getText())));
+    }
+
+    public void checkAccountButtonPushed(){
+        accountResponse.setText(accountController.check(Integer.parseInt(idAccount.getText())));
+    }
+
+    private static ObservableList<ExchangeRate> getExchangesRates() {
+        ObservableList<ExchangeRate> exchangeRates = FXCollections.observableArrayList();
+        ExchangeRateController exchangeRatesController = new ExchangeRateController();
+        ExchangeRate exchangeRate = exchangeRatesController.getLastExchangeRate();
+        exchangeRates.add(exchangeRate);
+        return exchangeRates;
+    }
+
+    public void refreshLastExchangeRateButtonPushed() {
+        exchangeRates = getExchangesRates();
+        exchangeRateTableViewFromGBP.setItems(exchangeRates);
+        exchangeRateTableViewFromEUR.setItems(exchangeRates);
+        exchangeRateTableViewFromRON.setItems(exchangeRates);
+        exchangeRateTableViewFromRUB.setItems(exchangeRates);
+    }
+
+    public void addRealExchangeRateButtonPushed()
+    {
+        exchangeRateController.createReal();
     }
 
     public void refreshChartRegionStatisticsButtonPushed() {
@@ -154,12 +228,11 @@ public class Controller implements Initializable {
         }
     }
 
-
     private void showFromPage(String page){
         page = page.replaceAll(",", "");
         CustomerController customerController = new CustomerController();
 
-        ArrayList<String> customers = customerController.getCustomersIdsFromPage(page , numberOfCustomersInPage);
+        ArrayList<String> customers = customerController.getCustomersIdsFromPage(page , CustomerView.numberOfCustomersInPage);
 
         ObservableList<Customer> customersAux = FXCollections.observableArrayList();
 
@@ -219,7 +292,7 @@ public class Controller implements Initializable {
 
     public void lastPageCustomerButtonPushed(){
         int numberOfCustomers = CustomerController.getCustomersIds().size();
-        String page = String.valueOf((int) Math.ceil((double)numberOfCustomers / (double)numberOfCustomersInPage));
+        String page = String.valueOf((int) Math.ceil((double)numberOfCustomers / (double)CustomerView.numberOfCustomersInPage));
         customerFromIndex.setText(page);
         showFromPage(page);
     }

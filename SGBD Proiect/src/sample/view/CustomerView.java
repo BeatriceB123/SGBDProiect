@@ -8,12 +8,11 @@ import entities.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.sql.Date;
 
 public class CustomerView {
     public static CustomerController customerController;
+    public static int numberOfCustomersInPage = 20;
 
     //will return an observable list of customers
     private static ObservableList<Customer> getCustomers() {

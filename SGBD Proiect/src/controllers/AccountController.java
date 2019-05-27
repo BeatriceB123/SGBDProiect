@@ -47,14 +47,20 @@ public class AccountController {
         System.out.println(output);
     }
 
-    public String check(int idAccount) throws SQLException {
+    public String check(int idAccount){
         Connection con = Database.getConnection();
         String call = "{ call account_check(?,?) }";
-        CallableStatement statement = con.prepareCall(call);
-        statement.setInt(1, idAccount);
-        statement.registerOutParameter(2, Types.VARCHAR);
-        statement.execute();
-        return (statement.getString(2));
+        CallableStatement statement = null;
+        try {
+            statement = con.prepareCall(call);
+            statement.setInt(1, idAccount);
+            statement.registerOutParameter(2, Types.VARCHAR);
+            statement.execute();
+            return (statement.getString(2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "no data for this id";
     }
 
     public void findById(int id) throws SQLException{
@@ -66,5 +72,22 @@ public class AccountController {
                     rs.getString(3) + ", account value: " + rs.getString(4) + ". It has been created at: " + rs.getString(5) +
                     " and has last been updated at " + rs.getString(6) + ".");
         }
+    }
+
+    public String generateStatement(int idAccount){
+        Connection con = Database.getConnection();
+        String call = "{ ? = call generate_statement(?) }";
+        CallableStatement statement = null;
+        try {
+            statement = con.prepareCall(call);
+            statement.registerOutParameter(1, Types.VARCHAR);
+            statement.setInt(2, idAccount);
+            statement.execute();
+            return statement.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "no data for this id";
     }
 }

@@ -18,23 +18,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="780.0" minWidth="1320.0" prefHeight="853.0" prefWidth="1320.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <tabs>
-    <Tab text="Home">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="ceva" layoutX="82.0" layoutY="237.0" promptText="Bank ID" />
-                  <Button fx:id="buton1" layoutX="145.0" layoutY="279.0" mnemonicParsing="false" text="By region" />
-                  <Button fx:id="buton11" layoutX="269.0" layoutY="524.0" mnemonicParsing="false" text="Get regional statistics" />
-                  <Button fx:id="buton12" layoutX="269.0" layoutY="615.0" mnemonicParsing="false" text="Get Staff statistics" />
-                  <TextField fx:id="ceva1" layoutX="82.0" layoutY="524.0" promptText="Region" />
-                  <TextField fx:id="ceva2" layoutX="82.0" layoutY="615.0" promptText="Staff ID" />
-                  <Button fx:id="buton14" layoutX="145.0" layoutY="409.0" mnemonicParsing="false" text="By region" />
-                  <Button fx:id="buton15" layoutX="145.0" layoutY="363.0" mnemonicParsing="false" text="By region" />
-                  <Button fx:id="buton16" layoutX="145.0" layoutY="320.0" mnemonicParsing="false" text="By r" />
-               </children></AnchorPane>
-      </content>
-    </Tab>
-    <Tab text="Banci">
+    <Tab text="Banks">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -43,9 +27,9 @@
                         <TableView fx:id="bankTableView" prefHeight="507.0" prefWidth="1316.0">
                           <columns>
                             <TableColumn fx:id="bankNameColumn" prefWidth="214.0" text="name" />
-                            <TableColumn fx:id="bankCityColumn" prefWidth="195.0" text="city" />
-                              <TableColumn fx:id="bankAddressColumn" prefWidth="324.0" text="address" />
-                              <TableColumn fx:id="idBankColumn" prefWidth="299.0" text="idBank" />
+                            <TableColumn fx:id="bankCityColumn" prefWidth="319.0" text="city" />
+                              <TableColumn fx:id="bankAddressColumn" prefWidth="425.0" text="address" />
+                              <TableColumn fx:id="idBankColumn" prefWidth="349.0" text="idBank" />
                           </columns>
                         </TableView>
                         <HBox prefHeight="22.0" prefWidth="1094.0" spacing="10.0">
@@ -82,7 +66,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-      <Tab text="Clienti">
+      <Tab text="Costumers">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -164,7 +148,7 @@
                </children></AnchorPane>
          </content>
       </Tab>
-      <Tab text="Angajati">
+      <Tab text="Staff">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -233,43 +217,72 @@
                </children></AnchorPane>
          </content>
       </Tab>
-      <Tab text="Curs valutar">
+      <Tab text="Exchange rate">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <HBox layoutX="9.0" layoutY="9.0" prefHeight="753.0" prefWidth="1320.0">
+                  <HBox prefHeight="753.0" prefWidth="1320.0">
                      <children>
-                        <VBox prefHeight="753.0" prefWidth="67.0" />
-                        <VBox prefHeight="753.0" prefWidth="341.0">
+                        <VBox prefHeight="708.0" prefWidth="374.0" spacing="100.0">
                            <children>
-                              <TableView prefHeight="316.0" prefWidth="418.0">
+                              <TableView fx:id="exchangeRateTableViewFromEUR" prefHeight="68.0" prefWidth="452.0">
                                 <columns>
-                                  <TableColumn prefWidth="94.0" text="RON" />
-                                  <TableColumn prefWidth="87.0" text="EUR" />
-                                    <TableColumn prefWidth="74.0" text="USD" />
-                                    <TableColumn prefWidth="85.0" text="GBP" />
+                                  <TableColumn fx:id="eurToGbp" prefWidth="122.0" text="eur to gbp" />
+                                  <TableColumn fx:id="eurToRon" prefWidth="119.0" text="eur to ron" />
+                                    <TableColumn fx:id="eurToRub" prefWidth="131.0" text="eur to rub" />
                                 </columns>
                               </TableView>
-                              <VBox prefHeight="84.0" prefWidth="341.0" />
-                              <TableView prefHeight="378.0" prefWidth="341.0">
-                                 <columns>
-                                    <TableColumn prefWidth="94.0" text="RON" />
-                                    <TableColumn prefWidth="87.0" text="EUR" />
-                                    <TableColumn prefWidth="74.0" text="USD" />
-                                    <TableColumn prefWidth="85.0" text="GBP" />
-                                 </columns>
+                              <TableView fx:id="exchangeRateTableViewFromRON" prefHeight="71.0" prefWidth="313.0">
+                                <columns>
+                                  <TableColumn fx:id="ronToGbp" prefWidth="123.0" text="ron to gbp" />
+                                  <TableColumn fx:id="ronToEur" prefWidth="118.0" text="ron to eur" />
+                                    <TableColumn fx:id="ronToRub" prefWidth="133.0" text="ron to rub" />
+                                </columns>
+                              </TableView>
+                              <TableView fx:id="exchangeRateTableViewFromRUB" prefHeight="64.0" prefWidth="313.0">
+                                <columns>
+                                  <TableColumn fx:id="rubToGbp" prefWidth="124.0" text="rub to gbp" />
+                                  <TableColumn fx:id="rubToEur" prefWidth="120.0" text="rub to eur" />
+                                    <TableColumn fx:id="rubToRon" prefWidth="133.0" text="rub to ron" />
+                                </columns>
+                              </TableView>
+                              <TableView fx:id="exchangeRateTableViewFromGBP" prefHeight="77.0" prefWidth="313.0">
+                                <columns>
+                                  <TableColumn fx:id="gbpToEur" prefWidth="125.0" text="gbp to eur" />
+                                  <TableColumn fx:id="gbpToRon" prefWidth="121.0" text="gbp to ron" />
+                                    <TableColumn fx:id="gbpToRub" prefWidth="130.0" text="gbp to rub" />
+                                </columns>
                               </TableView>
                            </children>
+                           <HBox.margin>
+                              <Insets top="25.0" />
+                           </HBox.margin>
+                           <padding>
+                              <Insets top="75.0" />
+                           </padding>
                         </VBox>
-                        <VBox prefHeight="753.0" prefWidth="115.0" />
-                        <Button mnemonicParsing="false" text="Get Exchange rate from date:" />
-                        <DatePicker />
+                        <VBox prefHeight="753.0" prefWidth="295.0" />
+                        <VBox prefHeight="753.0" prefWidth="438.0" spacing="75.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#addRealExchangeRateButtonPushed" text="Add exchange real rate" />
+                              <Button mnemonicParsing="false" onAction="#refreshLastExchangeRateButtonPushed" text="Refresh last exchange rate" />
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="Get Exchange rate from id:" />
+                                    <TextField prefHeight="25.0" prefWidth="82.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets top="150.0" />
+                           </padding>
+                        </VBox>
                      </children>
                   </HBox>
                </children></AnchorPane>
          </content>
       </Tab>
-      <Tab text="Tranzactii">
+      <Tab text="Transactions">
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -355,7 +368,7 @@
                <children>
                   <VBox layoutX="2.0" layoutY="-2.0" prefHeight="827.0" prefWidth="1320.0">
                      <children>
-                        <PieChart fx:id="pieChartForRegionStatistics" prefHeight="655.0" prefWidth="1320.0" snapToPixel="false" />
+                        <PieChart fx:id="pieChartForRegionStatistics" prefHeight="655.0" prefWidth="1320.0" snapToPixel="false" title="Chart of regions" />
                         <Button mnemonicParsing="false" onAction="#refreshChartRegionStatisticsButtonPushed" text="Refresh chart" />
                         <Label fx:id="regionStatisticsResponse" prefHeight="45.0" prefWidth="245.0">
                            <VBox.margin>
@@ -370,5 +383,76 @@
             </AnchorPane>
         </content>
       </Tab>
+      <Tab text="Account">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <VBox layoutY="-1.0" prefHeight="827.0" prefWidth="1320.0">
+                     <children>
+                        <TableView prefHeight="602.0" prefWidth="1320.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                        </TableView>
+                        <HBox prefHeight="57.0" prefWidth="1320.0" spacing="12.0">
+                           <children>
+                              <Label text="Set id :" />
+                              <TextField fx:id="idAccount" prefHeight="25.0" prefWidth="86.0" />
+                           </children>
+                           <padding>
+                              <Insets left="35.0" top="12.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="42.0" prefWidth="1320.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#genrateStatementAccountButtonPushed" prefHeight="25.0" prefWidth="143.0" text="Generate Statement">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="35.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets top="12.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="73.0" prefWidth="1320.0" spacing="30.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#checkAccountButtonPushed" text="Check" />
+                              <Label fx:id="accountResponse">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="35.0" top="20.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+    <Tab text="Home">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="ceva" layoutX="82.0" layoutY="237.0" promptText="Bank ID" />
+                  <Button fx:id="buton1" layoutX="145.0" layoutY="279.0" mnemonicParsing="false" text="By region" />
+                  <Button fx:id="buton11" layoutX="269.0" layoutY="524.0" mnemonicParsing="false" text="Get regional statistics" />
+                  <Button fx:id="buton12" layoutX="269.0" layoutY="615.0" mnemonicParsing="false" text="Get Staff statistics" />
+                  <TextField fx:id="ceva1" layoutX="82.0" layoutY="524.0" promptText="Region" />
+                  <TextField fx:id="ceva2" layoutX="82.0" layoutY="615.0" promptText="Staff ID" />
+                  <Button fx:id="buton14" layoutX="145.0" layoutY="409.0" mnemonicParsing="false" text="By region" />
+                  <Button fx:id="buton15" layoutX="145.0" layoutY="363.0" mnemonicParsing="false" text="By region" />
+                  <Button fx:id="buton16" layoutX="145.0" layoutY="320.0" mnemonicParsing="false" text="By r" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
   </tabs>
 </TabPane>
