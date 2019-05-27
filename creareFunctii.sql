@@ -7,6 +7,100 @@ on transaction_history(id_staff, transaction_date);
 CREATE INDEX eotm2
 on staff(job_position, id_staff); 
 
+CREATE OR REPLACE FUNCTION generate_statement(p_id_account IN INT)
+RETURN VARCHAR2
+AS
+  v_id_customer bank_account.id_customer%type;
+  v_fisier UTL_FILE.FILE_TYPE;
+  v_f_name customer.f_name%type;
+  v_l_name customer.l_name%type;
+  CURSOR c_client_transactions IS
+    SELECT id_bank, id_account_from, id_account_to, transaction_type, transaction_date, transaction_hour, money_amount FROM transaction_history 
+      WHERE id_account_from = p_id_account OR id_account_to = p_id_account;
+  CURSOR c_client_account IS
+    SELECT account_type, monetary_value FROM bank_account WHERE id_account = p_id_account;
+BEGIN
+  SELECT id_customer INTO v_id_customer FROM bank_account 
+    WHERE id_account = p_id_account AND ROWNUM<2;
+  SELECT f_name INTO v_f_name FROM customer WHERE id_customer = v_id_customer;
+  SELECT l_name INTO v_l_name FROM customer WHERE id_customer = v_id_customer;
+  v_fisier := UTL_FILE.FOPEN('MYDIR','statement.txt','W');
+  UTL_FILE.PUTF(v_fisier, 'First name: ' );
+  UTL_FILE.PUTF(v_fisier, v_f_name || chr(13) || chr(10) );
+  UTL_FILE.PUTF(v_fisier, 'Last name: ' );
+  UTL_FILE.PUTF(v_fisier, v_l_name || chr(13) || chr(10) );
+  FOR v_std_linie IN c_client_account LOOP
+    UTL_FILE.PUTF(v_fisier, 'Bank account type: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.account_type || chr(13) || chr(10) );
+    UTL_FILE.PUTF(v_fisier, 'Monetary value of account: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.monetary_value || ' RON' || chr(13) || chr(10) );
+  END LOOP;
+  FOR v_std_linie IN c_client_transactions LOOP
+    UTL_FILE.PUTF(v_fisier, 'Bank id: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.id_bank || ' / ' );
+    UTL_FILE.PUTF(v_fisier, 'Id deponent: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.id_account_from || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Id depozitar: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.id_account_to || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Transaction type: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.transaction_type || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Transaction date: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.transaction_date || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Transaction hour: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.transaction_hour || ' / ');
+    UTL_FILE.PUTF(v_fisier, 'Money amount: ' );
+    UTL_FILE.PUTF(v_fisier, v_std_linie.money_amount || chr(13) || chr(10));
+  END LOOP;
+  UTL_FILE.FCLOSE(v_fisier);
+  return 'Successfully generated statement for given account';
+END;
+/
+
+CREATE OR REPLACE FUNCTION add_real_exchange_rate
+RETURN VARCHAR2
+AS
+  pieces utl_http.html_pieces;
+  GBP_to_EUR exchange_rate.to_EUR%type;
+  GBP_to_RON exchange_rate.to_RON%type;
+  GBP_to_RUB exchange_rate.to_RUB%type;
+  EUR_to_GBP exchange_rate.to_GBP%type;
+  EUR_to_RON exchange_rate.to_RON%type;
+  EUR_to_RUB exchange_rate.to_RUB%type;
+  RON_to_GBP exchange_rate.to_GBP%type;
+  RON_to_EUR exchange_rate.to_EUR%type;
+  RON_to_RUB exchange_rate.to_RUB%type;
+  RUB_to_GBP exchange_rate.to_GBP%type;
+  RUB_to_EUR exchange_rate.to_EUR%type;
+  RUB_to_RON exchange_rate.to_RON%type;
+  v_id exchange_rate.id_rate%type;
+BEGIN 
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=GBP'); 
+  GBP_to_EUR := SUBSTR(pieces(1), INSTR(pieces(1), 'EUR') + 5, 5);
+  GBP_to_RON := SUBSTR(pieces(1), INSTR(pieces(1), 'RON') + 5, 5);
+  GBP_to_RUB := SUBSTR(pieces(1), INSTR(pieces(1), 'RUB') + 5, 5);
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=EUR'); 
+  EUR_to_GBP := SUBSTR(pieces(1), INSTR(pieces(1), 'GBP') + 5, 5);
+  EUR_to_RON := SUBSTR(pieces(1), INSTR(pieces(1), 'RON') + 5, 5);
+  EUR_to_RUB := SUBSTR(pieces(1), INSTR(pieces(1), 'RUB') + 5, 5);
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=RON'); 
+  RON_to_GBP := SUBSTR(pieces(1), INSTR(pieces(1), 'GBP') + 5, 5);
+  RON_to_EUR := SUBSTR(pieces(1), INSTR(pieces(1), 'EUR') + 5, 5);
+  RON_to_RUB := SUBSTR(pieces(1), INSTR(pieces(1), 'RUB') + 5, 5);
+  pieces := utl_http.request_pieces('http://api.exchangeratesapi.io/latest?base=RUB'); 
+  RUB_to_GBP := SUBSTR(pieces(1), INSTR(pieces(1), 'GBP') + 5, 5);
+  RUB_to_EUR := SUBSTR(pieces(1), INSTR(pieces(1), 'EUR') + 5, 5);
+  RUB_to_RON := SUBSTR(pieces(1), INSTR(pieces(1), 'RON') + 5, 5);
+  SELECT * INTO v_id FROM (SELECT count(*) FROM exchange_rate);
+  v_id := v_id + 1;
+  INSERT INTO exchange_rate VALUES (v_id, 'GBP', 1, GBP_to_EUR, GBP_to_RON, GBP_to_RUB, NULL, NULL);
+  INSERT INTO exchange_rate VALUES (v_id + 1, 'EUR', EUR_to_GBP, 1, EUR_to_RON, EUR_to_RUB, NULL, NULL);
+  INSERT INTO exchange_rate VALUES (v_id + 2, 'RON', RON_to_GBP, RON_to_EUR, 1, RON_to_RUB, NULL, NULL);
+  INSERT INTO exchange_rate VALUES (v_id + 3, 'RUB', RUB_to_GBP, RUB_to_EUR, RUB_to_RON, 1, NULL, NULL);
+  COMMIT;
+  return 'Successfully added the new exchange rates.';
+END;
+/
+
 CREATE OR REPLACE FUNCTION new_customer(
     p_f_name IN VARCHAR2, p_l_name IN VARCHAR2, p_city IN VARCHAR2, p_email IN VARCHAR2, p_phone_number IN VARCHAR2, p_date_of_birth IN DATE, p_account_type IN VARCHAR2, p_value IN INT)
 RETURN VARCHAR2
