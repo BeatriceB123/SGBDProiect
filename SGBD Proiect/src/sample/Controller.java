@@ -32,6 +32,7 @@ public class Controller implements Initializable {
     private ExchangeRateController exchangeRateController = new ExchangeRateController();
     private AccountController accountController = new AccountController();
     private StaffController staffController = new StaffController();
+    private TransactionController transactionController = new TransactionController();
 
     public ObservableList<ExchangeRate> exchangeRates = getExchangesRates();
 
@@ -131,6 +132,48 @@ public class Controller implements Initializable {
     @FXML private TextField idBankForTransactionEvolutionStatistics;
     @FXML private TextField yearBankForTransactionEvolutionStatistics;
     @FXML private Label responseBankForTransactionEvolutionStatistics;
+
+    @FXML private TextField monthTransacionsForMostActiveDay;
+    @FXML private TextField yearTransacionsForMostActiveDay;
+    @FXML private Label responseTransacionsForMostActiveDay;
+
+    public void getMostActiveDayButtonPushed() {
+        try {
+            if (monthTransacionsForMostActiveDay.getText() == null)
+                throw new Exception("null id");
+            if (yearTransacionsForMostActiveDay.getText() == null)
+                throw new Exception("null year");
+
+            int month = Integer.parseInt(monthTransacionsForMostActiveDay.getText());
+            int year = Integer.parseInt(yearTransacionsForMostActiveDay.getText());
+
+            responseTransacionsForMostActiveDay.setText(transactionController.mostActiveDay(month, year));
+
+        }
+        catch (Exception e)
+        {
+            responseTransacionsForMostActiveDay.setText("Error");
+        }
+    }
+
+    public void getEfficientMostActiveDayButtonPushed() {
+        try {
+            if (monthTransacionsForMostActiveDay.getText() == null)
+                throw new Exception("null id");
+            if (yearTransacionsForMostActiveDay.getText() == null)
+                throw new Exception("null year");
+
+            int month = Integer.parseInt(monthTransacionsForMostActiveDay.getText());
+            int year = Integer.parseInt(yearTransacionsForMostActiveDay.getText());
+
+            responseTransacionsForMostActiveDay.setText(transactionController.mostActiveDayEfficient(month, year));
+
+        }
+        catch (Exception e)
+        {
+            responseTransacionsForMostActiveDay.setText("Error");
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

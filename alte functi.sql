@@ -1,3 +1,33 @@
+create or replace FUNCTION most_active_day_with_select(month_number IN INT, year_number IN INT) RETURN VARCHAR2 AS
+  v_day INT;
+  v_transaction_number INT; 
+BEGIN
+  IF(year_number < 2018 OR year_number > 2050) THEN
+    return 'Invalid year';
+  END IF;
+  v_day := 0;
+  IF(month_number < 1 OR month_number > 12) THEN
+    return 'Invalid month number';
+  END IF;
+  
+  SELECT "NUMBER", extract(DAY FROM transaction_date) into v_day, v_transaction_number
+FROM
+  (SELECT COUNT(*) AS "NUMBER",
+    transaction_date
+  FROM transaction_history
+  WHERE extract(YEAR FROM transaction_date) = year_number
+  AND extract(MONTH FROM transaction_Date)  = month_number
+  GROUP BY TRANSACTION_DATE
+  ORDER BY "NUMBER" DESC
+  )
+WHERE rownum < 2;
+  
+  IF (v_day = 0) THEN return 'No transactions found';
+    ELSE
+  return 'Most active day is day number '||v_day||' with ' || v_transaction_number||' total transactions made.';
+  END IF;
+END;
+
 create or replace FUNCTION  get_region_transaction_datas RETURN VARCHAR2 AS
     v_city customer.city%TYPE;
     v_valoare transaction_history.money_amount%TYPE;

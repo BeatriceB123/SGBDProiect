@@ -22,16 +22,40 @@ public class TransactionController {
         System.out.println(output);
     }
 
-    public void mostActiveDay(int monthNr, int yearNr) throws SQLException {
+    public String mostActiveDay(int monthNr, int yearNr){
         Connection con = Database.getConnection();
         String call = "{ ? = call most_active_day(?,?) }";
-        CallableStatement statement = con.prepareCall(call);
-        statement.registerOutParameter(1, Types.VARCHAR);
-        statement.setInt(2, monthNr);
-        statement.setInt(3, yearNr);
-        statement.execute();
-        String output = statement.getString(1);
-        System.out.println(output);
+        CallableStatement statement = null;
+        try {
+            statement = con.prepareCall(call);
+            statement.registerOutParameter(1, Types.VARCHAR);
+            statement.setInt(2, monthNr);
+            statement.setInt(3, yearNr);
+            statement.execute();
+            return  statement.getString(1);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  "No data found";
+    }
+
+    public String mostActiveDayEfficient(int monthNr, int yearNr){
+        Connection con = Database.getConnection();
+        String call = "{ ? = call most_active_day_with_select(?,?) }";
+        CallableStatement statement = null;
+        try {
+            statement = con.prepareCall(call);
+            statement.registerOutParameter(1, Types.VARCHAR);
+            statement.setInt(2, monthNr);
+            statement.setInt(3, yearNr);
+            statement.execute();
+            return  statement.getString(1);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  "No data found";
     }
 
     //aduna toate tranzactiile din luna curenta

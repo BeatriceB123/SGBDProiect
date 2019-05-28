@@ -28,11 +28,14 @@
                      <children>
                         <TableView fx:id="bankTableView" prefHeight="507.0" prefWidth="1316.0">
                           <columns>
-                            <TableColumn fx:id="bankNameColumn" prefWidth="214.0" text="name" />
-                            <TableColumn fx:id="bankCityColumn" prefWidth="319.0" text="city" />
-                              <TableColumn fx:id="bankAddressColumn" prefWidth="425.0" text="address" />
-                              <TableColumn fx:id="idBankColumn" prefWidth="349.0" text="idBank" />
+                            <TableColumn fx:id="bankNameColumn" prefWidth="232.0" text="name" />
+                            <TableColumn fx:id="bankCityColumn" prefWidth="295.0" text="city" />
+                              <TableColumn fx:id="bankAddressColumn" prefWidth="397.0" text="address" />
+                              <TableColumn fx:id="idBankColumn" prefWidth="276.0" text="idBank" />
                           </columns>
+                           <VBox.margin>
+                              <Insets left="45.0" right="45.0" />
+                           </VBox.margin>
                         </TableView>
                         <HBox prefHeight="22.0" prefWidth="1094.0" spacing="10.0">
                            <children>
@@ -330,13 +333,40 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Get monthly money sum" />
-                              <Button mnemonicParsing="false" text="Get most active day" />
-                              <ComboBox prefWidth="150.0" promptText="Choose year" />
-                              <ComboBox prefWidth="150.0" promptText="Choose month" />
+                              <VBox prefHeight="100.0" prefWidth="245.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Get monthly money sum" />
+                                 </children>
+                              </VBox>
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0" />
+                        <VBox prefHeight="92.0" prefWidth="1320.0">
+                           <children>
+                              <HBox prefHeight="55.0" prefWidth="1320.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#getEfficientMostActiveDayButtonPushed" text="Get most active day efficient" />
+                                    <Button mnemonicParsing="false" onAction="#getMostActiveDayButtonPushed" text="Get most active day with variables" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="44.0" prefWidth="1320.0">
+                                 <children>
+                                    <Label text="Month: " />
+                                    <TextField fx:id="monthTransacionsForMostActiveDay" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <HBox prefHeight="52.0" prefWidth="1320.0">
+                           <children>
+                              <Label text="Year:" />
+                              <TextField fx:id="yearTransacionsForMostActiveDay" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label fx:id="responseTransacionsForMostActiveDay" prefHeight="96.0" prefWidth="920.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -391,10 +421,14 @@
                <children>
                   <VBox layoutY="-1.0" prefHeight="827.0" prefWidth="1320.0">
                      <children>
-                        <TableView prefHeight="602.0" prefWidth="1320.0">
+                        <TableView prefHeight="535.0" prefWidth="1320.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn prefWidth="150.0" text="id_account" />
+                            <TableColumn minWidth="0.0" prefWidth="206.0" text="id_customer" />
+                              <TableColumn prefWidth="161.0" text="monetary_value" />
+                              <TableColumn prefWidth="239.0" text="created_at" />
+                              <TableColumn prefWidth="201.0" text="updated_at" />
+                              <TableColumn prefWidth="239.0" text="account_type" />
                           </columns>
                         </TableView>
                         <HBox prefHeight="57.0" prefWidth="1320.0" spacing="12.0">
