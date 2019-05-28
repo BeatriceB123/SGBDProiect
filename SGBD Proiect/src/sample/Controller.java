@@ -8,7 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.converter.NumberStringConverter;
@@ -18,6 +21,7 @@ import sample.view.CustomerView;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static sample.Datas.isNumeric;
@@ -27,8 +31,9 @@ public class Controller implements Initializable {
     private StatisticsController statisticsController = new StatisticsController();
     private ExchangeRateController exchangeRateController = new ExchangeRateController();
     private AccountController accountController = new AccountController();
+    private StaffController staffController = new StaffController();
 
-    public static ObservableList<ExchangeRate> exchangeRates = getExchangesRates();
+    public ObservableList<ExchangeRate> exchangeRates = getExchangesRates();
 
     //private static int numberOfStaffsInPage = 20;
 
@@ -107,8 +112,63 @@ public class Controller implements Initializable {
     @FXML private TextField idAccount;
     @FXML private Label accountResponse;
 
+    @FXML private NumberAxis xAxis = new NumberAxis();
+    @FXML private NumberAxis yAxis = new NumberAxis();
+    @FXML private LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
+
+    @FXML private TextField idStaffForTransactionEvolutionStatistics;
+    @FXML private TextField yearForTransactionEvolutionStatistics;
+    @FXML private Label responseForTransactionEvolutionStatistics;
+
+
+    public void generateStaffTransactionsStatisticsInTimeButtonPushed()
+    {
+        try {
+            if(idStaffForTransactionEvolutionStatistics.getText() == null)
+                throw new Exception("null id");
+            if(yearForTransactionEvolutionStatistics.getText() == null)
+                throw new Exception("null year");
+
+            int id = Integer.parseInt(idStaffForTransactionEvolutionStatistics.getText());
+            int year = Integer.parseInt(yearForTransactionEvolutionStatistics.getText());
+
+            String result = staffController.getStaffTotalAmountInTime(id);
+
+            setChart(result, year);
+        }
+        catch (Exception e) {
+            responseForTransactionEvolutionStatistics.setText("Parameter error\n" + e.getMessage());
+        }
+    }
+
+    public void refreshChartStaffTransactionInTimeButtonPushed()
+    {
+        lineChart.getData().clear();
+        responseForTransactionEvolutionStatistics.setText("Chart cleared");
+    }
+
+    private void setChart(String datas, int year){
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+
+        String[] arrOfStr = datas.split("@");
+
+        for (String a : arrOfStr)
+        {
+            if(a.substring(0, 4).equals(String.valueOf(year))) {
+                System.out.print(a + '-');
+                int month = Integer.parseInt(a.substring(5, 7));
+                int amount = Integer.parseInt(a.substring(8));
+
+                series.getData().add(new XYChart.Data(month, amount));
+            }
+        }
+        lineChart.getData().add(series);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        generateStaffTransactionsStatisticsInTimeButtonPushed();
 
         //set up the columns in the bank table
         bankNameColumn.setCellValueFactory(new PropertyValueFactory<Bank, String>("name"));
@@ -169,10 +229,9 @@ public class Controller implements Initializable {
         accountResponse.setText(accountController.check(Integer.parseInt(idAccount.getText())));
     }
 
-    private static ObservableList<ExchangeRate> getExchangesRates() {
+    private ObservableList<ExchangeRate> getExchangesRates() {
         ObservableList<ExchangeRate> exchangeRates = FXCollections.observableArrayList();
-        ExchangeRateController exchangeRatesController = new ExchangeRateController();
-        ExchangeRate exchangeRate = exchangeRatesController.getLastExchangeRate();
+        ExchangeRate exchangeRate = exchangeRateController.getLastExchangeRate();
         exchangeRates.add(exchangeRate);
         return exchangeRates;
     }

@@ -91,4 +91,19 @@ public class StaffController {
             return "no data";
         }
     }
+
+    public String getStaffTotalAmountInTime(int id){
+        Connection con = Database.getConnection();
+        String call = "{ ? = call get_staff_total_amount(?) }";
+        CallableStatement statement = null;
+        try {
+            statement = con.prepareCall(call);
+            statement.registerOutParameter(1, Types.VARCHAR);
+            statement.setInt(2, id);
+            statement.execute();
+            return statement.getString(1);
+        } catch (SQLException e) {
+            return e.getMessage();
+        }
+    }
 }
