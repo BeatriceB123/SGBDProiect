@@ -93,4 +93,19 @@ public class BankController {
         return result;
     }
 
+    public String getBankTotalAmountInTime(int id){
+        Connection con = Database.getConnection();
+        String call = "{ ? = call get_bank_total_amount_in_time(?) }";
+        CallableStatement statement = null;
+        try {
+            statement = con.prepareCall(call);
+            statement.registerOutParameter(1, Types.VARCHAR);
+            statement.setInt(2, id);
+            statement.execute();
+            return statement.getString(1);
+        } catch (SQLException e) {
+            return e.getMessage();
+        }
+    }
+
 }

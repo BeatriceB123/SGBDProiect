@@ -112,63 +112,28 @@ public class Controller implements Initializable {
     @FXML private TextField idAccount;
     @FXML private Label accountResponse;
 
-    @FXML private NumberAxis xAxis = new NumberAxis();
-    @FXML private NumberAxis yAxis = new NumberAxis();
-    @FXML private LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
+
+    //staff statistics
+    @FXML private NumberAxis xAxisForStaff = new NumberAxis();
+    @FXML private NumberAxis yAxisForStaff = new NumberAxis();
+    @FXML private LineChart<Number,Number> lineChartForStaff = new LineChart<>(xAxisForStaff,yAxisForStaff);
 
     @FXML private TextField idStaffForTransactionEvolutionStatistics;
     @FXML private TextField yearForTransactionEvolutionStatistics;
     @FXML private Label responseForTransactionEvolutionStatistics;
 
 
-    public void generateStaffTransactionsStatisticsInTimeButtonPushed()
-    {
-        try {
-            if(idStaffForTransactionEvolutionStatistics.getText() == null)
-                throw new Exception("null id");
-            if(yearForTransactionEvolutionStatistics.getText() == null)
-                throw new Exception("null year");
+    //bank statistics
+    @FXML private NumberAxis xAxisForBank = new NumberAxis();
+    @FXML private NumberAxis yAxisForBank = new NumberAxis();
+    @FXML private LineChart<Number,Number> lineChartForBank = new LineChart<>(xAxisForBank,yAxisForBank);
 
-            int id = Integer.parseInt(idStaffForTransactionEvolutionStatistics.getText());
-            int year = Integer.parseInt(yearForTransactionEvolutionStatistics.getText());
-
-            String result = staffController.getStaffTotalAmountInTime(id);
-
-            setChart(result, year);
-        }
-        catch (Exception e) {
-            responseForTransactionEvolutionStatistics.setText("Parameter error\n" + e.getMessage());
-        }
-    }
-
-    public void refreshChartStaffTransactionInTimeButtonPushed()
-    {
-        lineChart.getData().clear();
-        responseForTransactionEvolutionStatistics.setText("Chart cleared");
-    }
-
-    private void setChart(String datas, int year){
-
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-
-        String[] arrOfStr = datas.split("@");
-
-        for (String a : arrOfStr)
-        {
-            if(a.substring(0, 4).equals(String.valueOf(year))) {
-                System.out.print(a + '-');
-                int month = Integer.parseInt(a.substring(5, 7));
-                int amount = Integer.parseInt(a.substring(8));
-
-                series.getData().add(new XYChart.Data(month, amount));
-            }
-        }
-        lineChart.getData().add(series);
-    }
+    @FXML private TextField idBankForTransactionEvolutionStatistics;
+    @FXML private TextField yearBankForTransactionEvolutionStatistics;
+    @FXML private Label responseBankForTransactionEvolutionStatistics;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        generateStaffTransactionsStatisticsInTimeButtonPushed();
 
         //set up the columns in the bank table
         bankNameColumn.setCellValueFactory(new PropertyValueFactory<Bank, String>("name"));
@@ -214,12 +179,86 @@ public class Controller implements Initializable {
         rubToGbp.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("rubToGbp"));
         rubToEur.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("rubToEur"));
         rubToRon.setCellValueFactory(new PropertyValueFactory<ExchangeRate, String>("rubToRon"));
-
-
-
-
     }
 
+
+    private XYChart.Series<Number, Number> getSeriesForChartFromData (String datas, int year) {
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+
+        String[] arrOfStr = datas.split("@");
+
+        for (String a : arrOfStr)
+        {
+            if(a.substring(0, 4).equals(String.valueOf(year))) {
+                System.out.print(a + '-');
+                int month = Integer.parseInt(a.substring(5, 7));
+                int amount = Integer.parseInt(a.substring(8));
+
+                series.getData().add(new XYChart.Data(month, amount));
+            }
+        }
+        return series;
+    }
+
+    private void setChartBankStatistics(String datas, int year){
+        lineChartForBank.getData().add(getSeriesForChartFromData(datas, year));
+    }
+
+    private void setChartStaffStatistics(String datas, int year){
+        lineChartForStaff.getData().add(getSeriesForChartFromData(datas, year));
+    }
+
+    public void refreshChartBankTransactionInTimeButtonPushed() {
+        lineChartForBank.getData().clear();
+        responseBankForTransactionEvolutionStatistics.setText("Chart cleared");
+    }
+
+    public void refreshChartStaffTransactionInTimeButtonPushed() {
+        lineChartForStaff.getData().clear();
+        responseForTransactionEvolutionStatistics.setText("Chart cleared");
+    }
+
+    public void generateStaffTransactionsStatisticsInTimeButtonPushed() {
+        try {
+            if(idStaffForTransactionEvolutionStatistics.getText() == null)
+                throw new Exception("null id");
+            if(yearForTransactionEvolutionStatistics.getText() == null)
+                throw new Exception("null year");
+
+            int id = Integer.parseInt(idStaffForTransactionEvolutionStatistics.getText());
+            int year = Integer.parseInt(yearForTransactionEvolutionStatistics.getText());
+
+            String result = staffController.getStaffTotalAmountInTime(id);
+
+            setChartStaffStatistics(result, year);
+
+            responseForTransactionEvolutionStatistics.setText("Succes");
+        }
+        catch (Exception e) {
+            responseForTransactionEvolutionStatistics.setText("Parameter error\n" + e.getMessage());
+        }
+    }
+
+    public void generateBankTransactionsStatisticsInTimeButtonPushed() {
+        try {
+            if(idBankForTransactionEvolutionStatistics.getText() == null)
+                throw new Exception("null id");
+            if(yearBankForTransactionEvolutionStatistics.getText() == null)
+                throw new Exception("null year");
+
+            int id = Integer.parseInt(idBankForTransactionEvolutionStatistics.getText());
+            int year = Integer.parseInt(yearBankForTransactionEvolutionStatistics.getText());
+
+            String result = bankController.getBankTotalAmountInTime(id);
+
+            setChartBankStatistics(result, year);
+
+            responseBankForTransactionEvolutionStatistics.setText("Succes");
+        }
+        catch (Exception e) {
+            responseBankForTransactionEvolutionStatistics.setText("Parameter error\n" + e.getMessage());
+        }
+    }
 
     public void genrateStatementAccountButtonPushed(){
         accountResponse.setText(accountController.generateStatement(Integer.parseInt(idAccount.getText())));
@@ -244,8 +283,7 @@ public class Controller implements Initializable {
         exchangeRateTableViewFromRUB.setItems(exchangeRates);
     }
 
-    public void addRealExchangeRateButtonPushed()
-    {
+    public void addRealExchangeRateButtonPushed() {
         exchangeRateController.createReal();
     }
 

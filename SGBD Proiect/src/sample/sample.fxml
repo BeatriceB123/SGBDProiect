@@ -446,10 +446,48 @@
                <children>
                   <VBox layoutY="-2.0" prefHeight="822.0" prefWidth="1320.0">
                      <children>
+                        <HBox prefHeight="572.0" prefWidth="1320.0">
+                           <children>
+                              <LineChart fx:id="lineChartForBank" prefHeight="554.0" prefWidth="1321.0" title="Bank evolution in time">
+                                <xAxis>
+                                    <NumberAxis side="TOP" fx:id="xAxisForBank" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis fx:id="yAxisForBank" side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="64.0" prefWidth="1320.0" spacing="25.0">
+                           <children>
+                              <Label text="Bank id : " />
+                              <TextField fx:id="idBankForTransactionEvolutionStatistics" text="20" />
+                           </children>
+                           <VBox.margin>
+                              <Insets left="35.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="69.0" prefWidth="1320.0" spacing="25.0">
+                           <children>
+                              <Label text="Year" />
+                              <TextField fx:id="yearBankForTransactionEvolutionStatistics" text="2018" />
+                           </children>
+                           <VBox.margin>
+                              <Insets left="35.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="63.0" prefWidth="1320.0" spacing="25.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#generateBankTransactionsStatisticsInTimeButtonPushed" text="Generate " />
+                           </children>
+                           <VBox.margin>
+                              <Insets left="35.0" />
+                           </VBox.margin>
+                        </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Get evolution for staff with id" />
-                              <TextField />
+                              <Label fx:id="responseBankForTransactionEvolutionStatistics" prefHeight="71.0" prefWidth="1186.0" />
+                              <Button mnemonicParsing="false" onAction="#refreshChartBankTransactionInTimeButtonPushed" prefHeight="25.0" prefWidth="111.0" text="Refresh Chart" />
                            </children>
                         </HBox>
                      </children>
@@ -464,12 +502,12 @@
                   <VBox layoutX="1.0" layoutY="-2.0" prefHeight="825.0" prefWidth="1320.0">
                      <children>
                         <NumberAxis fx:id="yAxis1" side="LEFT" />
-                        <LineChart fx:id="lineChart" axisSortingPolicy="NONE" prefHeight="470.0" prefWidth="1320.0" title="Staff's transactions evolution">
+                        <LineChart fx:id="lineChartForStaff" axisSortingPolicy="NONE" prefHeight="470.0" prefWidth="1320.0" title="Staff's transactions evolution">
                           <xAxis>
-                              <NumberAxis side="TOP" fx:id="xAxis" />
+                              <NumberAxis side="TOP" fx:id="xAxisForStaff" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis fx:id="yAxis" side="LEFT" />
+                            <NumberAxis fx:id="yAxisForStaff" side="LEFT" />
                           </yAxis>
                         </LineChart>
                         <VBox prefHeight="170.0" prefWidth="1320.0" spacing="25.0">
