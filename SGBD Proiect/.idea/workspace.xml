@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="grafic pentru staff evolution">
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="grafic pentru Bank evolution">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/SGBD Proiect/controllers/StaffController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SGBD Proiect/controllers/StaffController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/BankController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/BankController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -496,7 +493,7 @@
       <workItem from="1558954059377" duration="11490000" />
       <workItem from="1558970154548" duration="645000" />
       <workItem from="1558981404796" duration="5807000" />
-      <workItem from="1559019472317" duration="8729000" />
+      <workItem from="1559019472317" duration="8762000" />
     </task>
     <task id="LOCAL-00001" summary="sql injection added&#10;interfaces for staff and transactions">
       <created>1558550061920</created>
@@ -575,15 +572,21 @@
       <option name="project" value="LOCAL" />
       <updated>1559028083854</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="grafic pentru Bank evolution">
+      <created>1559030273394</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1559030273394</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145842000" />
+    <option name="totallyTimeSpent" value="145875000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.13859275" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -594,7 +597,7 @@
       <window_info id="UI Designer" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.36619717" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.36619717" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39869988" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -635,7 +638,8 @@
     <MESSAGE value="chart pentru statistici pe regiune - grupate in functie de zona &#10;(ce e in plsql nu e chiar bine, ar fi trebuit sa fac o mapa draguta acolo&#10;in java ar fi trebuit sa derivez pentru statistici )" />
     <MESSAGE value="mici modificari nesemnificative" />
     <MESSAGE value="grafic pentru staff evolution" />
-    <option name="LAST_COMMIT_MESSAGE" value="grafic pentru staff evolution" />
+    <MESSAGE value="grafic pentru Bank evolution" />
+    <option name="LAST_COMMIT_MESSAGE" value="grafic pentru Bank evolution" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
